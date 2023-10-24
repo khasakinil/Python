@@ -1,0 +1,71 @@
+
+class Student:
+
+    school = 'Online school'
+    number_of_students = 0
+
+    def __init__(self, first_name, last_name, major):
+        self.first_name = first_name 
+        self.last_name = last_name
+        self.major = major
+        Student.number_of_students += 1
+
+    def full_name_with_major(self):
+        return f'{self.first_name} {self.last_name}, is a {self.major}!!'  
+
+    def full_name_with_major_school(self):
+        return f'{self.first_name} {self.last_name}, is a {self.major} going to {self.school}'    
+
+    @classmethod
+    def set_online_school(cls, new_school):
+        cls.school = new_school
+
+    @classmethod
+    def split_students(cls, str_student):
+        first_name, last_name, major = str_student.split(".")
+        return cls(first_name, last_name, major)
+
+
+print(f'Number of Students : {Student.number_of_students}')
+std_1 = Student("Satish", "Joshi", "Computer Science")
+print(f'Number of Students : {Student.number_of_students}')
+std_2 = Student("Manish", "Pande", "Aeronotics")
+print(f'Number of Students : {Student.number_of_students}')
+
+print(std_1.first_name)
+print(std_2.first_name)
+print(std_1.full_name_with_major())
+print(std_2.full_name_with_major())
+
+print("We can also invoke")
+print(Student.full_name_with_major(std_1))
+print(Student.full_name_with_major(std_2))
+
+print(std_1.full_name_with_major_school())
+print(std_2.full_name_with_major_school())
+
+print(std_1.school)
+Student.set_online_school("Udemy")
+print(std_2.school)
+print(std_1.school)
+
+std_3 = Student.split_students("Manoj.Vajpeyee.Data Scientist")
+print(std_3.full_name_with_major())
+
+""" stud_1 = Student()
+stud_2 = Student()
+
+print(stud_1)
+print(stud_2)
+
+stud_1.first_name = "Satish"
+stud_1.last_name = "Joshi"
+stud_1.major = "Computer Science"
+
+stud_2.first_name = "Manish"
+stud_2.last_name = "Pande"
+stud_2.major = "Aeronotics"
+
+print(stud_1.first_name)
+print(stud_2.first_name) """
+
