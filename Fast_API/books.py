@@ -19,9 +19,11 @@ async def read_all_books():
 # api with path paramter endpoint
 @app.get("/books/{book_title}")
 async def read_all_books(book_title: str):
+    books_to_return = []
     for book in BOOKS:
         if book.get('title').casefold() == book_title.casefold():
-            return book
+            books_to_return.append(book)
+    return books_to_return
 
 # api with query parameter endpoint
 @app.get("/books/cat/")
@@ -31,4 +33,14 @@ async def read_categoty_by_query(category: str):
         if book.get('category').casefold() == category.casefold():
             books_to_return.append(book)
     return books_to_return
+
+# api with path paramter and query parameter endpoint
+@app.get("/books/{book_author}/")
+async def read_all_books(book_author: str, category: str):
+    books_to_return = []
+    for book in BOOKS:
+        if book.get('category').casefold() == category.casefold() and book.get('author').casefold() == book_author.casefold():
+             books_to_return.append(book)
+    return books_to_return
+
 
