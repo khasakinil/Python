@@ -45,14 +45,14 @@ async def read_all_books(book_author: str, category: str):
 
 
 # with body for post request
-@app.post("/book/add")
+@app.post("/books/add")
 async def add_book_to_collection(new_book=Body()):
     BOOKS.append(new_book)
     return BOOKS
 
 
 # with body for put request
-@app.put("/book/update")
+@app.put("/books/update")
 async def update_book_in_collection(updated_book=Body()):
     for i in range(len(BOOKS)):
         if(BOOKS[i].get("title").casefold() == updated_book.get("title").casefold()):
@@ -61,7 +61,7 @@ async def update_book_in_collection(updated_book=Body()):
 
 
 # delete the record
-@app.delete("/book/delete/{book_title}")
+@app.delete("/books/delete/{book_title}")
 async def delete_book_in_collection(book_title : str):
     for i in range(len(BOOKS)):
         if(BOOKS[i].get("title").casefold() == book_title.casefold()):
