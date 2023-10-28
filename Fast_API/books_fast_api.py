@@ -12,13 +12,15 @@ class Book:
     author: str
     description: str
     rating: int
+    published_date: int
 
-    def __init__(self, id, title, author, description, rating):
+    def __init__(self, id, title, author, description, rating, published_date):
         self.id = id
         self.title = title
         self.author = author
         self.description = description
         self.rating = rating
+        self.published_date = published_date
 
 class BookRequest(BaseModel):
     id: Optional[int] = Field(title="id is not needed", default=0)
@@ -26,25 +28,27 @@ class BookRequest(BaseModel):
     author: str = Field(min_length=3)
     description: str = Field(min_length=5, max_length=50)
     rating: int = Field(gt=-1, lt=6)
+    published_date : int =Field(gt=1980, lt=2024)
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             'example': {
                 'title': 'A new Book',
                 'author': 'Book Author',
                 'description': 'A new description of a Book',
-                'rating': 5
+                'rating': 5,
+                'published_date': 2022
                 }
         }
 
 
 
-BOOKS = [Book(1, "All Passion Spent", "Vita Sackville-West", "category of historical fiction", 5),
-         Book(2,"The Waste Land", "T. S. Eliot", "category of  Poem", 5), 
-         Book(3, "Number the Stars", "Lois Lowry", "category of historical fiction", 5),
-         Book(4, "A Little Learning", "Evelyn Waugh", "category of Autobiography", 5),
-         Book(5, "Behold the Man", "Michael Moorcock", "category of science fiction", 4),
-         Book(6, "Arms and the Man", "George Bernard Shaw", "category of Comedy", 4)
+BOOKS = [Book(1, "All Passion Spent", "Vita Sackville-West", "category of historical fiction", 5, 1999),
+         Book(2,"The Waste Land", "T. S. Eliot", "category of  Poem", 5, 2007), 
+         Book(3, "Number the Stars", "Lois Lowry", "category of historical fiction", 5, 1991),
+         Book(4, "A Little Learning", "Evelyn Waugh", "category of Autobiography", 5, 2017),
+         Book(5, "Behold the Man", "Michael Moorcock", "category of science fiction", 4, 2009),
+         Book(6, "Arms and the Man", "George Bernard Shaw", "category of Comedy", 4, 2000)
          ]
 
 @app.get("/book/getall")
@@ -90,4 +94,12 @@ async def delete_book_by_id(book_id: int):
         if BOOKS[i].id == book_id:
             BOOKS.pop(i)
             break
+
+@app.get("/book/pubdate/{published_date}")
+async def get_book_by_rating(published_date: int):
+    books_to_return = []
+    for book in BOOKS:
+        if book.published_date == published_date :
+            books_to_return.append(book)
+    return books_to_return
 
