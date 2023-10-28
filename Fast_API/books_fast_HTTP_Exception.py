@@ -3,6 +3,7 @@ from fastapi import FastAPI, Path, Query, HTTPException
 #used for validation on data
 from pydantic import BaseModel, Field
 from typing import Optional
+from starlette import status
 
 app = FastAPI()
 
@@ -51,11 +52,11 @@ BOOKS = [Book(1, "All Passion Spent", "Vita Sackville-West", "category of histor
          Book(6, "Arms and the Man", "George Bernard Shaw", "category of Comedy", 4, 2000)
          ]
 
-@app.get("/book/getall")
+@app.get("/book/getall", status_code=status.HTTP_200_OK)
 async def read_all_books():
     return BOOKS
 
-@app.get("/book/id/{bookid}")
+@app.get("/book/id/{bookid}", status_code=status.HTTP_200_OK)
 async def get_book_by_id(bookid: int = Path(gt=0)):
     for book in BOOKS:
         if book.id == bookid :
@@ -70,13 +71,13 @@ async def get_book_by_rating(book_rating: int = Path(ge=0)):
             books_to_return.append(book)
     return books_to_return
 
-@app.post("/book/add")
+@app.post("/book/add", status_code=status.HTTP_201_CREATED)
 async def add_new_books(book_request: BookRequest):
     new_book = Book(**book_request.dict())
     BOOKS.append(find_book_by_id(new_book))
     return new_book
 
-@app.put("/book/update")
+@app.put("/book/update", status_code=status.HTTP_204_NO_CONTENT)
 async def update_book(book: BookRequest):
     book_changed = False
     for i in range(len(BOOKS)):
@@ -94,7 +95,7 @@ def find_book_by_id(book:Book):
     book.id = 1 if len(BOOKS) == 0 else BOOKS[-1].id + 1
     return book
 
-@app.delete("/book/delete/{book_id}")
+@app.delete("/book/delete/{book_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_book_by_id(book_id: int = Path(gt=0)):
     book_found = False
     for i in range(len(BOOKS)):
@@ -105,7 +106,7 @@ async def delete_book_by_id(book_id: int = Path(gt=0)):
     if not book_found:
         raise HTTPException(status_code=404, detail='Item not found')
 
-@app.get("/book/pubdate/")
+@app.get("/book/pubdate/", status_code=status.HTTP_200_OK)
 async def get_book_by_rating(published_date: int= Query(gt=1970, lt=2024)):
     books_to_return = []
     for book in BOOKS:
@@ -113,7 +114,7 @@ async def get_book_by_rating(published_date: int= Query(gt=1970, lt=2024)):
             books_to_return.append(book)
     return books_to_return
 
-@app.get("/book/rating/query/")
+@app.get("/book/rating/query/", status_code=status.HTTP_200_OK)
 async def get_book_by_rating(book_rating: int = Query(gt=0, lt=6)):
     books_to_return = []
     for book in BOOKS:
