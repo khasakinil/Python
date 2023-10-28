@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import Body, FastAPI
 
 app = FastAPI()
 
@@ -43,4 +43,29 @@ async def read_all_books(book_author: str, category: str):
              books_to_return.append(book)
     return books_to_return
 
+
+# with body for post request
+@app.post("/book/add")
+async def add_book_to_collection(new_book=Body()):
+    BOOKS.append(new_book)
+    return BOOKS
+
+
+# with body for put request
+@app.put("/book/update")
+async def update_book_in_collection(updated_book=Body()):
+    for i in range(len(BOOKS)):
+        if(BOOKS[i].get("title").casefold() == updated_book.get("title").casefold()):
+            BOOKS[i] = updated_book
+    return BOOKS
+
+
+# delete the record
+@app.delete("/book/delete/{book_title}")
+async def delete_book_in_collection(book_title : str):
+    for i in range(len(BOOKS)):
+        if(BOOKS[i].get("title").casefold() == book_title.casefold()):
+            BOOKS.pop(i)
+            break
+    return BOOKS
 
