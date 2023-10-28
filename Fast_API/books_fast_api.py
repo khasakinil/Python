@@ -51,14 +51,43 @@ BOOKS = [Book(1, "All Passion Spent", "Vita Sackville-West", "category of histor
 async def read_all_books():
     return BOOKS
 
+@app.get("/book/id/{bookid}")
+async def get_book_by_id(bookid: int):
+    for book in BOOKS:
+        if book.id == bookid :
+            return book
+        
+@app.get("/book/rating/{book_rating}")
+async def get_book_by_rating(book_rating: int):
+    books_to_return = []
+    for book in BOOKS:
+        if book.rating == book_rating :
+            books_to_return.append(book)
+    return books_to_return
+
 @app.post("/book/add")
 async def add_new_books(book_request: BookRequest):
     new_book = Book(**book_request.dict())
     BOOKS.append(find_book_by_id(new_book))
     return new_book
 
+@app.put("/book/update")
+async def update_book(book: BookRequest):
+    for i in range(len(BOOKS)):
+        if BOOKS[i].id == book.id :
+            BOOKS[i]=book
+            break
+    return book
+
 
 def find_book_by_id(book:Book):
     book.id = 1 if len(BOOKS) == 0 else BOOKS[-1].id + 1
     return book
+
+@app.delete("/book/delete/{book_id}")
+async def delete_book_by_id(book_id: int):
+    for i in range(len(BOOKS)):
+        if BOOKS[i].id == book_id:
+            BOOKS.pop(i)
+            break
 
