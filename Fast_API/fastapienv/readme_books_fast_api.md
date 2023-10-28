@@ -25,7 +25,20 @@ Request Body -
         "rating": 4
     }
 
+3. get books by rating
+Reques URI : http://127.0.0.1:8000/book/rating/4
 
+4. update book
+Reques URI : http://127.0.0.1:8000/book/update
+
+Request Body -
+    {
+        "id": 3,
+        "title": "Number the Stars",
+        "author": "Lois Lowry",
+        "description": "description - historical fiction",
+        "rating": 4
+    }
 
 
 
