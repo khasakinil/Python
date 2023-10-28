@@ -73,7 +73,7 @@ async def get_book_by_rating(book_rating: int = Path(ge=0)):
 
 @app.post("/book/add", status_code=status.HTTP_201_CREATED)
 async def add_new_books(book_request: BookRequest):
-    new_book = Book(**book_request.dict())
+    new_book = Book(**book_request.model_dump())
     BOOKS.append(find_book_by_id(new_book))
     return new_book
 
