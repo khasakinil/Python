@@ -17,3 +17,5 @@ for swagger url => http://127.0.0.1:8000/docs
 Path parameter => http://127.0.0.1:8000/books/The%20Waste%20Land
 
 Query parameter => http://127.0.0.1:8000/books/cat/?category=Autobiography 
+
+with path paramter and query parameter => http://127.0.0.1:8000/books/George%20Bernard%20Shaw/?category=Comedy
