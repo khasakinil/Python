@@ -40,6 +40,7 @@ Request Body -
         "rating": 4
     }
 
+5. get books by published_date
+Reques URI : http://127.0.0.1:8000/book/pubdate/1999
 
-
-
+6. 
