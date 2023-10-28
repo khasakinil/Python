@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Path, Query
 
 #used for validation on data
 from pydantic import BaseModel, Field
@@ -56,13 +56,13 @@ async def read_all_books():
     return BOOKS
 
 @app.get("/book/id/{bookid}")
-async def get_book_by_id(bookid: int):
+async def get_book_by_id(bookid: int = Path(gt=0)):
     for book in BOOKS:
         if book.id == bookid :
             return book
         
 @app.get("/book/rating/{book_rating}")
-async def get_book_by_rating(book_rating: int):
+async def get_book_by_rating(book_rating: int = Path(ge=0)):
     books_to_return = []
     for book in BOOKS:
         if book.rating == book_rating :
@@ -89,17 +89,24 @@ def find_book_by_id(book:Book):
     return book
 
 @app.delete("/book/delete/{book_id}")
-async def delete_book_by_id(book_id: int):
+async def delete_book_by_id(book_id: int = Path(gt=0)):
     for i in range(len(BOOKS)):
         if BOOKS[i].id == book_id:
             BOOKS.pop(i)
             break
 
-@app.get("/book/pubdate/{published_date}")
-async def get_book_by_rating(published_date: int):
+@app.get("/book/pubdate/")
+async def get_book_by_rating(published_date: int= Query(gt=1970, lt=2024)):
     books_to_return = []
     for book in BOOKS:
         if book.published_date == published_date :
             books_to_return.append(book)
     return books_to_return
 
+@app.get("/book/rating/query/")
+async def get_book_by_rating(book_rating: int = Query(gt=0, lt=6)):
+    books_to_return = []
+    for book in BOOKS:
+        if book.rating == book_rating :
+            books_to_return.append(book)
+    return books_to_return
